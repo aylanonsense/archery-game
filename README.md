@@ -18,7 +18,7 @@ X	Add lighting
 X	Move camera out and zoom in to decrease effect of perspective (dolly)
 	Apply a texture to the background
 	Limit the player from moving out of bounds
-	Detect clicks on the player
+X	Detect clicks on the player
 	Detect when the mouse is dragged and released
 	Create an arrow when the mouse is released
 	Give the arrow a model

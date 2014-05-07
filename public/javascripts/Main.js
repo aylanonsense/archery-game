@@ -169,5 +169,22 @@ define(function() {
 				}
 			}
 		});
+
+		//click handler
+		var projector = new THREE.Projector();
+		document.addEventListener('mousedown', function(evt) {
+			evt.preventDefault();
+			var mouseVector = new THREE.Vector3();
+			mouseVector.x = 2 * (evt.clientX / WIDTH) - 1;
+			mouseVector.y = 1 - 2 * (evt.clientY / HEIGHT);
+			var raycaster = projector.pickingRay(mouseVector.clone(), camera);
+			var intersects = raycaster.intersectObject(playerMesh);
+			for(var i = 0; i < intersects.length; i++) {
+				var intersection = intersects[i],
+				obj = intersection.object;
+				obj.material.color.setHex(Math.random() * 0xffffff);
+				//TODO
+			}
+		}, false);
 	};
 });
