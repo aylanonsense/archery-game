@@ -12,7 +12,7 @@ Steps
 X	Render something, ANYTHING
 X	Draw a cylinder
 X	Make the cylinder move with the WASD
-	Add a background plane
+X	Add a background plane
 X	Position the camera to be a birds eye view
 	Add lighting
 	Apply a texture to the background

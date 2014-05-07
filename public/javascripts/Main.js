@@ -7,14 +7,21 @@ define(function() {
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 		camera.position.z = 1000;
 		var geometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
-		var material = new THREE.MeshBasicMaterial({ color: 0xffaa00, wireframe: false });
+		var material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
 		var mesh = new THREE.Mesh(geometry, material);
 		mesh.rotation.x += Math.PI / 2;
+		mesh.position.z = 50.05;
 		scene.add(mesh);
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setClearColor( 0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild(renderer.domElement);
+
+		//background plane
+		var planeGeometry = new THREE.PlaneGeometry(5000, 5000);
+		var planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffee99, wireframe: false });
+		var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+		scene.add(planeMesh);
 
 		//loop
 		function eachFrame(ms, time) {
