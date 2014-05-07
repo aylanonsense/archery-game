@@ -4,7 +4,7 @@ define(function() {
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 		camera.position.z = 1000;
-		var geometry = new THREE.BoxGeometry(200, 200, 200);
+		var geometry = new THREE.CylinderGeometry(100, 100, 400, 50, 50, false);
 		var material = new THREE.MeshBasicMaterial({ color: 0xffaa00, wireframe: true });
 		var mesh = new THREE.Mesh(geometry, material);
 		scene.add(mesh);

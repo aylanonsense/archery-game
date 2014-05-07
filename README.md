@@ -10,7 +10,7 @@ The game will have a character that can move with WASD or the arrow keys. If the
 Steps
 -----
 X	Render something, ANYTHING
-	Draw a cylinder
+X	Draw a cylinder
 	Make the cylinder move with the WASD and arrow keys
 	Add a background plane
 	Position the camera to be a birds eye view
