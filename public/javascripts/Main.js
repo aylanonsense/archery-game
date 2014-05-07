@@ -1,9 +1,32 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module); }
 define(function() {
 	return function() {
+		var WIDTH = window.innerWidth;
+		var HEIGHT = window.innerHeight;
 		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-		camera.position.z = 1000;
+
+		//cameras
+		var birdsEyeOrtho = new THREE.OrthographicCamera(WIDTH / - 1.2, WIDTH / 1.2, HEIGHT / 1.2, HEIGHT / - 1.2, 1, 1000);
+		birdsEyeOrtho.position.z = 1000;
+		var isoOrtho = new THREE.OrthographicCamera(WIDTH / - 1.2, WIDTH / 1.2, HEIGHT / 1.2, HEIGHT / - 1.2, 1, 4000);
+		isoOrtho.position.y = -500;
+		isoOrtho.position.z = 900;
+		isoOrtho.rotation.x = 0.3 * Math.PI / 2;
+		var isoPers = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 1, 10000);
+		isoPers.position.y = -500;
+		isoPers.position.z = 900;
+		isoPers.rotation.x = 0.3 * Math.PI / 2;
+		var angledPers = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 1, 10000);
+		angledPers.position.y = -800;
+		angledPers.position.z = 600;
+		angledPers.rotation.x = 0.6 * Math.PI / 2;
+		var sidePers = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 1, 10000);
+		sidePers.position.y = -900;
+		sidePers.position.z = 100;
+		sidePers.rotation.x =  Math.PI / 2;
+		var cameras = [ birdsEyeOrtho, isoOrtho, isoPers, angledPers, sidePers ];
+		var cameraIndex = 0;
+
 		var geometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
 		var material = new THREE.MeshLambertMaterial({
 			color: 'blue' 
@@ -55,7 +78,7 @@ define(function() {
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
 			mesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
 			mesh.position.y += MOVE_SPEED * mult * verticalMove * s;
-			renderer.render(scene, camera);
+			renderer.render(scene, cameras[cameraIndex]);
 		}
 		var prevTime;
 		requestAnimationFrame(function(time) {
@@ -108,6 +131,9 @@ define(function() {
 					horizontalMove = isPressed.A ? -1 : 0;
 				}
 			}
+			else if(key === 'C' && !pressed) {
+				cameraIndex = (cameraIndex + 1) % cameras.length;
+			}
 		}
 		var isPressed = {
 			W: false,
@@ -119,7 +145,8 @@ define(function() {
 			87: 'W',
 			65: 'A',
 			83: 'S',
-			68: 'D'
+			68: 'D',
+			67: 'C'
 		};
 		$(document).on('keyup', function(evt) {
 			var key = KEY_LOOKUP[evt.which];
