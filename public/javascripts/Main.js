@@ -28,7 +28,6 @@ define(function() {
 			var ms = time - PREV_TIME;
 			PREV_TIME = time;
 			eachFrame(ms, time);
-			if(Math.random() > 0.05)
 			window.requestAnimationFrame(loop);
 		}
 	};
