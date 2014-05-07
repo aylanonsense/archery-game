@@ -16,7 +16,7 @@ define(function() {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild(renderer.domElement);
 		function eachFrame(ms, time) {
-			//TODO
+			renderer.render(scene, camera);
 		}
 		requestAnimationFrame(function(time) {
 			PREV_TIME = Date.now();
