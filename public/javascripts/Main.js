@@ -7,26 +7,56 @@ define(function() {
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 		camera.position.z = 1000;
 		var geometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
-		var material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
+		var material = new THREE.MeshLambertMaterial({
+			color: 'blue' 
+		});
 		var mesh = new THREE.Mesh(geometry, material);
+		mesh.castShadow = true;
 		mesh.rotation.x += Math.PI / 2;
 		mesh.position.z = 50.05;
 		scene.add(mesh);
 		var renderer = new THREE.WebGLRenderer();
-		renderer.setClearColor( 0xffffff, 1);
+		renderer.setClearColor(0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.shadowMapEnabled = true;
+		renderer.shadowMapCullFace = THREE.CullFaceBack;
 		document.body.appendChild(renderer.domElement);
 
 		//background plane
-		var planeGeometry = new THREE.PlaneGeometry(5000, 5000);
-		var planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffee99, wireframe: false });
+		var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+		var planeMaterial = new THREE.MeshLambertMaterial({
+			color: 0xffee99 
+		});
 		var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 		scene.add(planeMesh);
+		planeMesh.receiveShadow = true;
+
+		//lighting
+		var ambientLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5); 
+		scene.add(ambientLight);
+		var light = new THREE.DirectionalLight(0xffffff, 0.5);
+		light.position.x = 2000;
+		light.position.y = 0;
+		light.position.z = 1000;
+		light.castShadow = true;
+		light.shadowDarkness = 1.0;
+		//light.shadowCameraVisible = true;
+		light.shadowCameraNear = 1;
+		light.shadowCameraLeft = -1000;
+		light.shadowCameraRight = 1000;
+		light.shadowCameraTop = 1000;
+		light.shadowCameraBottom = -1000;
+		light.shadowMapWidth = 2048;
+		light.shadowMapHeight = 2048;
+		scene.add(light);
 
 		//loop
+		var i = 0;
 		function eachFrame(ms, time) {
 			move(time);
-			renderer.render(scene, camera);
+			if(i++ % 3 === 0) {
+				renderer.render(scene, camera);
+			}
 		}
 		requestAnimationFrame(function(time) {
 			prevTime = Date.now();

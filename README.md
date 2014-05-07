@@ -14,7 +14,7 @@ X	Draw a cylinder
 X	Make the cylinder move with the WASD
 X	Add a background plane
 X	Position the camera to be a birds eye view
-	Add lighting
+X	Add lighting
 	Apply a texture to the background
 	Limit the player from moving out of bounds
 	Detect clicks on the player
