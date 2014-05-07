@@ -1,8 +1,6 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module); }
 define(function() {
 	return function() {
-		var START_TIME;
-		var prevTime;
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 		camera.position.z = 1000;
@@ -51,41 +49,30 @@ define(function() {
 		scene.add(light);
 
 		//loop
-		var i = 0;
 		function eachFrame(ms, time) {
-			move(time);
-			if(i++ % 3 === 0) {
-				renderer.render(scene, camera);
-			}
-		}
-		requestAnimationFrame(function(time) {
-			prevTime = Date.now();
-			START_TIME = prevTime - time;
-			loop(time);
-		});
-		function loop(time) {
-			time += START_TIME;
-			var ms = time - prevTime;
-			prevTime = time;
-			eachFrame(ms, time);
-			window.requestAnimationFrame(loop);
-		}
-
-		//movement
-		function move(now) {
-			var ms = timeOfLastMove ? now - timeOfLastMove : 0;
 			var s = ms / 1000;
 			var isMovingDiagonal = (horizontalMove !== 0 && verticalMove !== 0);
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
 			mesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
 			mesh.position.y += MOVE_SPEED * mult * verticalMove * s;
-			timeOfLastMove = now;
+			renderer.render(scene, camera);
 		}
+		var prevTime;
+		requestAnimationFrame(function(time) {
+			prevTime = time;
+			loop(time);
+		});
+		function loop(time) {
+			eachFrame(time - prevTime, time);
+			prevTime = time;
+			requestAnimationFrame(loop);
+		}
+
+		//movement
 		var horizontalMove = 0;
 		var verticalMove = 0;
 		var DIAGONAL_MULTIPLIER = 1 / Math.sqrt(2);
 		var MOVE_SPEED = 800;
-		var timeOfLastMove = null;
 
 		//keyboard
 		function onKeyChange(key, pressed) {
@@ -121,7 +108,6 @@ define(function() {
 					horizontalMove = isPressed.A ? -1 : 0;
 				}
 			}
-			move(Date.now());
 		}
 		var isPressed = {
 			W: false,
