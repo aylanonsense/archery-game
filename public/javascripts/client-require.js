@@ -5,6 +5,6 @@ requirejs.config({
 	}
 });
 
-requirejs([ 'example/Example' ], function(Example) {
-	console.log("Loaded.");
+requirejs([ 'Main' ], function(Main) {
+	Main();
 });
