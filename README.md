@@ -11,9 +11,9 @@ Steps
 -----
 X	Render something, ANYTHING
 X	Draw a cylinder
-	Make the cylinder move with the WASD and arrow keys
+X	Make the cylinder move with the WASD
 	Add a background plane
-	Position the camera to be a birds eye view
+X	Position the camera to be a birds eye view
 	Add lighting
 	Apply a texture to the background
 	Limit the player from moving out of bounds
