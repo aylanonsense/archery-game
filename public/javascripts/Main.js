@@ -80,6 +80,18 @@ define(function() {
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
 			playerMesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
 			playerMesh.position.y += MOVE_SPEED * mult * verticalMove * s;
+			if(playerMesh.position.x < -400) {
+				playerMesh.position.x = -400;
+			}
+			else if(playerMesh.position.x > 400) {
+				playerMesh.position.x = 400;
+			}
+			if(playerMesh.position.y < -400) {
+				playerMesh.position.y = -400;
+			}
+			else if(playerMesh.position.y > 400) {
+				playerMesh.position.y = 400;
+			}
 			renderer.render(scene, camera);
 		}
 		var prevTime;

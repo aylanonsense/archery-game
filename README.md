@@ -17,7 +17,7 @@ X	Position the camera to be a birds eye view
 X	Add lighting
 X	Move camera out and zoom in to decrease effect of perspective (dolly)
 	Apply a texture to the background
-	Limit the player from moving out of bounds
+X	Limit the player from moving out of bounds
 X	Detect clicks on the player
 	Detect when the mouse is dragged and released
 	Create an arrow when the mouse is released
