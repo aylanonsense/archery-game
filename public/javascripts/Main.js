@@ -26,16 +26,18 @@ define(function() {
 		sidePers.rotation.x =  Math.PI / 2;
 		var cameras = [ birdsEyeOrtho, isoOrtho, isoPers, angledPers, sidePers ];
 		var cameraIndex = 0;
+		var camera = cameras[cameraIndex];
 
-		var geometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
-		var material = new THREE.MeshLambertMaterial({
+		//player
+		var playerGeometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
+		var playerMaterial = new THREE.MeshLambertMaterial({
 			color: 'blue' 
 		});
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.castShadow = true;
-		mesh.rotation.x += Math.PI / 2;
-		mesh.position.z = 50.05;
-		scene.add(mesh);
+		var playerMesh = new THREE.Mesh(playerGeometry, playerMaterial);
+		playerMesh.castShadow = true;
+		playerMesh.rotation.x += Math.PI / 2;
+		playerMesh.position.z = 50.05;
+		scene.add(playerMesh);
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setClearColor(0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -76,9 +78,9 @@ define(function() {
 			var s = ms / 1000;
 			var isMovingDiagonal = (horizontalMove !== 0 && verticalMove !== 0);
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
-			mesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
-			mesh.position.y += MOVE_SPEED * mult * verticalMove * s;
-			renderer.render(scene, cameras[cameraIndex]);
+			playerMesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
+			playerMesh.position.y += MOVE_SPEED * mult * verticalMove * s;
+			renderer.render(scene, camera);
 		}
 		var prevTime;
 		requestAnimationFrame(function(time) {
@@ -133,6 +135,7 @@ define(function() {
 			}
 			else if(key === 'C' && !pressed) {
 				cameraIndex = (cameraIndex + 1) % cameras.length;
+				camera = cameras[cameraIndex];
 			}
 		}
 		var isPressed = {
