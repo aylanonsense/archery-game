@@ -18,7 +18,7 @@ define(function() {
 
 		//loop
 		function eachFrame(ms, time) {
-			move(ms);
+			move(time);
 			renderer.render(scene, camera);
 		}
 		requestAnimationFrame(function(time) {
@@ -35,12 +35,14 @@ define(function() {
 		}
 
 		//movement
-		function move(ms) {
+		function move(now) {
+			var ms = timeOfLastMove ? now - timeOfLastMove : 0;
 			var s = ms / 1000;
 			var isMovingDiagonal = (horizontalMove !== 0 && verticalMove !== 0);
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
 			mesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
 			mesh.position.y += MOVE_SPEED * mult * verticalMove * s;
+			timeOfLastMove = now;
 		}
 		var horizontalMove = 0;
 		var verticalMove = 0;
@@ -50,7 +52,6 @@ define(function() {
 
 		//keyboard
 		function onKeyChange(key, pressed) {
-			var now = Date.now();
 			if(key === 'W') {
 				if(pressed) {
 					verticalMove = 1;
@@ -83,6 +84,7 @@ define(function() {
 					horizontalMove = isPressed.A ? -1 : 0;
 				}
 			}
+			move(Date.now());
 		}
 		var isPressed = {
 			W: false,
