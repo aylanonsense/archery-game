@@ -31,7 +31,7 @@ define(function() {
 		//player
 		var playerGeometry = new THREE.CylinderGeometry(100, 100, 100, 50, 1, false);
 		var playerMaterial = new THREE.MeshLambertMaterial({
-			color: 'blue' 
+			color: 'blue'
 		});
 		var playerMesh = new THREE.Mesh(playerGeometry, playerMaterial);
 		playerMesh.castShadow = true;
@@ -48,7 +48,7 @@ define(function() {
 		//background plane
 		var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
 		var planeMaterial = new THREE.MeshLambertMaterial({
-			color: 0xffee99 
+			color: 0xffee99
 		});
 		var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 		scene.add(planeMesh);
@@ -62,7 +62,7 @@ define(function() {
 		scene.add(dragMesh);
 
 		//lighting
-		var ambientLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5); 
+		var ambientLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
 		scene.add(ambientLight);
 		var light = new THREE.DirectionalLight(0xffffff, 0.5);
 		light.position.x = 2000;
@@ -231,7 +231,7 @@ define(function() {
 
 		//projectiles
 		var arrowMaterial = new THREE.MeshLambertMaterial({
-			color: 'green' 
+			color: 'green'
 		});
 		var arrows = [];
 		var ARROW_MOVE_SPEED = 1000;
