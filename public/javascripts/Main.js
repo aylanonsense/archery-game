@@ -125,6 +125,7 @@ define(function() {
 				playerMesh.position.y = 400;
 			}
 			for(var i = 0, len = arrows.length; i < len; i++) {
+				arrows[i].velocity.z += GRAVITY * s;
 				arrows[i].mesh.position.x += arrows[i].velocity.x * s;
 				arrows[i].mesh.position.y += arrows[i].velocity.y * s;
 				arrows[i].mesh.position.z += arrows[i].velocity.z * s;
@@ -301,6 +302,7 @@ define(function() {
 			var dirVector = new THREE.Vector3();
 			dirVector.x = dirX;
 			dirVector.y = dirY;
+			dirVector.z = 0;
 			dirVector.normalize();
 			dirVector.multiplyScalar(moveSpeed);
 			arrows.push({
