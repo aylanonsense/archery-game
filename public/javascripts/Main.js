@@ -86,6 +86,7 @@ define(function() {
 		//lighting
 		var ambientLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
 		scene.add(ambientLight);
+		var isLightOn = true;
 		var light = new THREE.DirectionalLight(0xffffff, 0.5);
 		light.position.x = 2000;
 		light.position.y = 0;
@@ -188,6 +189,15 @@ define(function() {
 				cameraIndex = (cameraIndex + 1) % cameras.length;
 				camera = cameras[cameraIndex];
 			}
+			else if(key === 'L' && !pressed) {
+				isLightOn = !isLightOn;
+				if(!isLightOn) {
+					scene.remove(light);
+				}
+				else {
+					scene.add(light);
+				}
+			}
 		}
 		var isPressed = {
 			W: false,
@@ -200,7 +210,8 @@ define(function() {
 			65: 'A',
 			83: 'S',
 			68: 'D',
-			67: 'C'
+			67: 'C',
+			76: 'L'
 		};
 		$(document).on('keyup', function(evt) {
 			var key = KEY_LOOKUP[evt.which];
