@@ -272,8 +272,21 @@ define(function() {
 			color: 'green'
 		});
 		var arrows = [];
-		var ARROW_MOVE_SPEED = 1000;
+		var GRAVITY = -800;
+		function determineArrowStartingVelocity(squareDist) {
+			//squareDist is probably somewhere between 10k and 100k
+			//output should probably be somwehere between 1000 and 3500
+			if(squareDist > 100000) {
+				squareDist = 100000;
+			}
+			else if(squareDist < 10000) {
+				squareDist = 10000;
+			}
+			return 1000 + 2500 * (squareDist - 10000) / (100000 - 10000);
+		}
 		function fireArrow(x, y, dirX, dirY) {
+			var squareDistDragged = dirX * dirX + dirY * dirY;
+			var moveSpeed = determineArrowStartingVelocity(squareDistDragged);
 			dirX *= -1;
 			dirY *= -1;
 			var arrowGeometry = new THREE.CylinderGeometry(5, 5, 50, 10, 1, false);
@@ -289,7 +302,7 @@ define(function() {
 			dirVector.x = dirX;
 			dirVector.y = dirY;
 			dirVector.normalize();
-			dirVector.multiplyScalar(ARROW_MOVE_SPEED);
+			dirVector.multiplyScalar(moveSpeed);
 			arrows.push({
 				mesh: arrowMesh,
 				velocity: dirVector
