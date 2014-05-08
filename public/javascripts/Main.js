@@ -38,12 +38,34 @@ define(function() {
 		playerMesh.rotation.x += Math.PI / 2;
 		playerMesh.position.z = 50.05;
 		scene.add(playerMesh);
+
+		//renderer
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setClearColor(0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.shadowMapEnabled = true;
 		renderer.shadowMapCullFace = THREE.CullFaceBack;
 		document.body.appendChild(renderer.domElement);
+
+		//renderer stats
+		var polyStats = new THREEx.RendererStats();
+		polyStats.domElement.style.position = 'absolute';
+		polyStats.domElement.style.left = '0px';
+		polyStats.domElement.style.bottom = '0px';
+		polyStats.domElement.style.width = '110px';
+		document.body.appendChild(polyStats.domElement);
+		var fpsStats = new Stats();
+		fpsStats.setMode(0);
+		fpsStats.domElement.style.position = 'absolute';
+		fpsStats.domElement.style.left = '112px';
+		fpsStats.domElement.style.bottom = '0px';
+		document.body.appendChild(fpsStats.domElement);
+		var msStats = new Stats();
+		msStats.setMode(1);
+		msStats.domElement.style.position = 'absolute';
+		msStats.domElement.style.left = '193px';
+		msStats.domElement.style.bottom = '0px';
+		document.body.appendChild(msStats.domElement);
 
 		//background plane
 		var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
@@ -82,6 +104,8 @@ define(function() {
 
 		//loop
 		function eachFrame(ms, time) {
+			fpsStats.begin();
+			msStats.begin();
 			var s = ms / 1000;
 			var isMovingDiagonal = (horizontalMove !== 0 && verticalMove !== 0);
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
@@ -105,6 +129,9 @@ define(function() {
 				arrows[i].mesh.position.z += arrows[i].velocity.z * s;
 			}
 			renderer.render(scene, camera);
+			polyStats.update(renderer);
+			msStats.end();
+			fpsStats.end();
 		}
 		var prevTime;
 		requestAnimationFrame(function(time) {
