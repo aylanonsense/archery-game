@@ -99,6 +99,11 @@ define(function() {
 			else if(playerMesh.position.y > 400) {
 				playerMesh.position.y = 400;
 			}
+			for(var i = 0, len = arrows.length; i < len; i++) {
+				arrows[i].mesh.position.x += arrows[i].velocity.x * s;
+				arrows[i].mesh.position.y += arrows[i].velocity.y * s;
+				arrows[i].mesh.position.z += arrows[i].velocity.z * s;
+			}
 			renderer.render(scene, camera);
 		}
 		var prevTime;
@@ -202,7 +207,6 @@ define(function() {
 			for(var i = 0; i < intersects.length; i++) {
 				var intersection = intersects[i];
 				obj = intersection.object;
-				obj.material.color.setHex(Math.random() * 0xffffff);
 				isDraggingOffOfPlayer = true;
 			}
 		}, false);
@@ -220,9 +224,38 @@ define(function() {
 					var point = intersection.point;
 					var diffX = point.x - playerMesh.position.x;
 					var diffY = point.y - playerMesh.position.y;
-					console.log(diffX, diffY);
+					fireArrow(playerMesh.position.x, playerMesh.position.y, diffX, diffY);
 				}
 			}
 		}, false);
+
+		//projectiles
+		var arrowMaterial = new THREE.MeshLambertMaterial({
+			color: 'green' 
+		});
+		var arrows = [];
+		var ARROW_MOVE_SPEED = 1000;
+		function fireArrow(x, y, dirX, dirY) {
+			dirX *= -1;
+			dirY *= -1;
+			var arrowGeometry = new THREE.CylinderGeometry(5, 5, 50, 10, 1, false);
+			var arrowMesh = new THREE.Mesh(arrowGeometry, arrowMaterial);
+			arrowMesh.castShadow = true;
+			arrowMesh.position.x = playerMesh.position.x;
+			arrowMesh.position.y = playerMesh.position.y;
+			arrowMesh.position.z = 50.05;
+			var angle = Math.atan2(dirY, dirX);
+			arrowMesh.rotation.z = angle + Math.PI / 2;
+			scene.add(arrowMesh);
+			var dirVector = new THREE.Vector3();
+			dirVector.x = dirX;
+			dirVector.y = dirY;
+			dirVector.normalize();
+			dirVector.multiplyScalar(ARROW_MOVE_SPEED);
+			arrows.push({
+				mesh: arrowMesh,
+				velocity: dirVector
+			});
+		}
 	};
 });
