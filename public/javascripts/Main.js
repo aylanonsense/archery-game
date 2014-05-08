@@ -54,6 +54,13 @@ define(function() {
 		scene.add(planeMesh);
 		planeMesh.receiveShadow = true;
 
+		//drag plan
+		var dragGeometry = new THREE.PlaneGeometry(1000, 1000);
+		var dragMaterial = new THREE.MeshBasicMaterial({ wireframe: true, color: "red" });
+		var dragMesh = new THREE.Mesh(dragGeometry, dragMaterial);
+		dragMesh.position.z = 50;
+		scene.add(dragMesh);
+
 		//lighting
 		var ambientLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5); 
 		scene.add(ambientLight);
@@ -183,6 +190,7 @@ define(function() {
 		});
 
 		//click handler
+		var isDraggingOffOfPlayer = false;
 		var projector = new THREE.Projector();
 		document.addEventListener('mousedown', function(evt) {
 			evt.preventDefault();
@@ -192,10 +200,28 @@ define(function() {
 			var raycaster = projector.pickingRay(mouseVector.clone(), camera);
 			var intersects = raycaster.intersectObject(playerMesh);
 			for(var i = 0; i < intersects.length; i++) {
-				var intersection = intersects[i],
+				var intersection = intersects[i];
 				obj = intersection.object;
 				obj.material.color.setHex(Math.random() * 0xffffff);
-				//TODO
+				isDraggingOffOfPlayer = true;
+			}
+		}, false);
+		document.addEventListener('mouseup', function(evt) {
+			evt.preventDefault();
+			if(isDraggingOffOfPlayer) {
+				isDraggingOffOfPlayer = false;
+				var mouseVector = new THREE.Vector3();
+				mouseVector.x = 2 * (evt.clientX / WIDTH) - 1;
+				mouseVector.y = 1 - 2 * (evt.clientY / HEIGHT);
+				var raycaster = projector.pickingRay(mouseVector.clone(), camera);
+				var intersects = raycaster.intersectObject(dragMesh);
+				for(var i = 0; i < intersects.length; i++) {
+					var intersection = intersects[i];
+					var point = intersection.point;
+					var diffX = point.x - playerMesh.position.x;
+					var diffY = point.y - playerMesh.position.y;
+					console.log(diffX, diffY);
+				}
 			}
 		}, false);
 	};
