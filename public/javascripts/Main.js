@@ -107,11 +107,11 @@ define(function() {
 		function eachFrame(ms, time) {
 			fpsStats.begin();
 			msStats.begin();
-			var s = ms / 1000;
+			var t = ms / 1000;
 			var isMovingDiagonal = (horizontalMove !== 0 && verticalMove !== 0);
 			var mult = isMovingDiagonal ? DIAGONAL_MULTIPLIER : 1;
-			playerMesh.position.x += MOVE_SPEED * mult * horizontalMove * s;
-			playerMesh.position.y += MOVE_SPEED * mult * verticalMove * s;
+			playerMesh.position.x += MOVE_SPEED * mult * horizontalMove * t;
+			playerMesh.position.y += MOVE_SPEED * mult * verticalMove * t;
 			if(playerMesh.position.x < -400) {
 				playerMesh.position.x = -400;
 			}
@@ -124,11 +124,13 @@ define(function() {
 			else if(playerMesh.position.y > 400) {
 				playerMesh.position.y = 400;
 			}
+			var deltaVelZ = GRAVITY * t;
 			for(var i = 0, len = arrows.length; i < len; i++) {
-				arrows[i].velocity.z += GRAVITY * s;
-				arrows[i].mesh.position.x += arrows[i].velocity.x * s;
-				arrows[i].mesh.position.y += arrows[i].velocity.y * s;
-				arrows[i].mesh.position.z += arrows[i].velocity.z * s;
+				arrows[i].velocity.z += deltaVelZ / 2;
+				arrows[i].mesh.position.x += arrows[i].velocity.x * t;
+				arrows[i].mesh.position.y += arrows[i].velocity.y * t;
+				arrows[i].mesh.position.z += arrows[i].velocity.z * t;
+				arrows[i].velocity.z += deltaVelZ / 2;
 			}
 			renderer.render(scene, camera);
 			polyStats.update(renderer);
