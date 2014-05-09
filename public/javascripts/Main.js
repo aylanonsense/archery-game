@@ -287,6 +287,17 @@ define(function() {
 			}
 			return 1000 + 2500 * (squareDist - 10000) / (100000 - 10000);
 		}
+		function determineArrowStartingAngle(squareDist) {
+			//10k-25k: angle down
+			//50k-100k: angle up
+			if(squareDist > 100000) {
+				squareDist = 100000;
+			}
+			else if(squareDist < 10000) {
+				squareDist = 10000;
+			}
+			return 0.1 * ((squareDist - 10000) / (100000 - 10000)) - 0.03;
+		}
 		function fireArrow(x, y, dirX, dirY) {
 			var squareDistDragged = dirX * dirX + dirY * dirY;
 			var moveSpeed = determineArrowStartingVelocity(squareDistDragged);
@@ -305,6 +316,8 @@ define(function() {
 			dirVector.x = dirX;
 			dirVector.y = dirY;
 			dirVector.z = 0;
+			dirVector.normalize();
+			dirVector.z = determineArrowStartingAngle(squareDistDragged);
 			dirVector.normalize();
 			dirVector.multiplyScalar(moveSpeed);
 			arrows.push({
