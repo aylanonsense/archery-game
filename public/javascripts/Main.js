@@ -126,11 +126,13 @@ define(function() {
 			}
 			var deltaVelZ = GRAVITY * t;
 			for(var i = 0, len = arrows.length; i < len; i++) {
-				arrows[i].velocity.z += deltaVelZ / 2;
-				arrows[i].mesh.position.x += arrows[i].velocity.x * t;
-				arrows[i].mesh.position.y += arrows[i].velocity.y * t;
-				arrows[i].mesh.position.z += arrows[i].velocity.z * t;
-				arrows[i].velocity.z += deltaVelZ / 2;
+				if(arrows[i].mesh.position.z > 5) {
+					arrows[i].velocity.z += deltaVelZ / 2;
+					arrows[i].mesh.position.x += arrows[i].velocity.x * t;
+					arrows[i].mesh.position.y += arrows[i].velocity.y * t;
+					arrows[i].mesh.position.z += arrows[i].velocity.z * t;
+					arrows[i].velocity.z += deltaVelZ / 2;
+				}
 			}
 			renderer.render(scene, camera);
 			polyStats.update(renderer);
@@ -276,6 +278,7 @@ define(function() {
 		});
 		var arrows = [];
 		var GRAVITY = -800;
+		var ARROW_MOVE_SPEED = 1000;
 		function determineArrowStartingVelocity(squareDist) {
 			//squareDist is probably somewhere between 10k and 100k
 			//output should probably be somwehere between 1000 and 3500
@@ -285,7 +288,7 @@ define(function() {
 			else if(squareDist < 10000) {
 				squareDist = 10000;
 			}
-			return 1000 + 2500 * (squareDist - 10000) / (100000 - 10000);
+			return ARROW_MOVE_SPEED * (1 + 2.5 * (squareDist - 10000) / (100000 - 10000));
 		}
 		function determineArrowStartingAngle(squareDist) {
 			//10k-25k: angle down
