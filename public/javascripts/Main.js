@@ -1,5 +1,9 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module); }
-define(function() {
+define([
+	'obj/Arrow'
+], function(
+	Arrow
+) {
 	return function() {
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
@@ -124,15 +128,8 @@ define(function() {
 			else if(playerMesh.position.y > 400) {
 				playerMesh.position.y = 400;
 			}
-			var deltaVelZ = GRAVITY * t;
 			for(var i = 0, len = arrows.length; i < len; i++) {
-				if(arrows[i].mesh.position.z > 5) {
-					arrows[i].velocity.z += deltaVelZ / 2;
-					arrows[i].mesh.position.x += arrows[i].velocity.x * t;
-					arrows[i].mesh.position.y += arrows[i].velocity.y * t;
-					arrows[i].mesh.position.z += arrows[i].velocity.z * t;
-					arrows[i].velocity.z += deltaVelZ / 2;
-				}
+				arrows[i].eachFrame(ms, time);
 			}
 			renderer.render(scene, camera);
 			polyStats.update(renderer);
@@ -273,60 +270,16 @@ define(function() {
 		}, false);
 
 		//projectiles
-		var arrowMaterial = new THREE.MeshLambertMaterial({
-			color: 'green'
-		});
 		var arrows = [];
-		var GRAVITY = -800;
-		var ARROW_MOVE_SPEED = 1000;
-		function determineArrowStartingVelocity(squareDist) {
-			//squareDist is probably somewhere between 10k and 100k
-			//output should probably be somwehere between 1000 and 3500
-			if(squareDist > 100000) {
-				squareDist = 100000;
-			}
-			else if(squareDist < 10000) {
-				squareDist = 10000;
-			}
-			return ARROW_MOVE_SPEED * (1 + 2.5 * (squareDist - 10000) / (100000 - 10000));
-		}
-		function determineArrowStartingAngle(squareDist) {
-			//10k-25k: angle down
-			//50k-100k: angle up
-			if(squareDist > 100000) {
-				squareDist = 100000;
-			}
-			else if(squareDist < 10000) {
-				squareDist = 10000;
-			}
-			return 0.1 * ((squareDist - 10000) / (100000 - 10000)) - 0.03;
-		}
 		function fireArrow(x, y, dirX, dirY) {
-			var squareDistDragged = dirX * dirX + dirY * dirY;
-			var moveSpeed = determineArrowStartingVelocity(squareDistDragged);
-			dirX *= -1;
-			dirY *= -1;
-			var arrowGeometry = new THREE.CylinderGeometry(5, 5, 50, 10, 1, false);
-			var arrowMesh = new THREE.Mesh(arrowGeometry, arrowMaterial);
-			arrowMesh.castShadow = true;
-			arrowMesh.position.x = playerMesh.position.x;
-			arrowMesh.position.y = playerMesh.position.y;
-			arrowMesh.position.z = 50.05;
-			var angle = Math.atan2(dirY, dirX);
-			arrowMesh.rotation.z = angle + Math.PI / 2;
-			scene.add(arrowMesh);
-			var dirVector = new THREE.Vector3();
-			dirVector.x = dirX;
-			dirVector.y = dirY;
-			dirVector.z = 0;
-			dirVector.normalize();
-			dirVector.z = determineArrowStartingAngle(squareDistDragged);
-			dirVector.normalize();
-			dirVector.multiplyScalar(moveSpeed);
-			arrows.push({
-				mesh: arrowMesh,
-				velocity: dirVector
-			});
+			arrows.push(new Arrow({
+				dirX: dirX,
+				dirY: dirY,
+				x: x,
+				y: y,
+				z: 50.5,
+				scene: scene,
+			}));
 		}
 	};
 });
